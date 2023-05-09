@@ -1,0 +1,71 @@
+
+% Channel ID to read data from 
+readChannelID = 991218; 
+% Wind Direction Field ID 
+SpeciesIDFieldID = 3; 
+% Wind Speed Field ID 
+AudioEventsFieldID = 4; 
+   
+% Channel Read API Key   
+% If your channel is private, then enter the read API 
+% Key between the '' below:   
+readAPIKey = '482Q3KISO7KBSWBZ'; 
+   
+% Fetch the last 4 points from the Bat Detector channel:
+speciesID= thingSpeakRead(readChannelID,'Fields',SpeciesIDFieldID,'NumPoints',20,...
+'ReadKey',readAPIKey); 
+   
+% Fetch wind speed for the last 60 points from the MathWorks weather station 
+numAudioEvents = thingSpeakRead(readChannelID,'Fields',AudioEventsFieldID,...
+'NumPoints',20,'ReadKey',readAPIKey);
+
+% speciesID
+% numAudioEvents
+
+% C = [A B]
+
+A = [speciesID numAudioEvents]
+
+% [~,b] = unique(A(:,1),'stable')
+[~,b] = unique(A(:,1),'last')
+C = A(b,:)
+
+
+% Extract the first column, species label:
+D = C(:,1)
+
+% Extract the second column, audio events:
+E = C(:,2)
+
+labels = string(D)
+x = E
+
+% This is where the mapping assignment occurs:
+% May want to remove House keys or try and divide by 10 or something.
+numbers_to_decode = {'0','17','26','32','35','71','92','97','6','43','86','55','21'};
+names = {'','C.PIP','HOUSE.KEYS','NOCTULA','PLECOTUS','RHINO.HIPPO','S.PIP','NATTERERI','N.PIP','RHINO.FERRUM','BRANDT','DAUB','BIRD'};
+M = containers.Map(numbers_to_decode,names)
+
+k = keys(M) ;
+val = values(M) ;
+
+% Now get the species name from the numbers using the map:
+for i = 1:length(labels)
+     z{i}=M(labels{i})
+end
+
+% Trim the length of the audio events vector to fit that of species:
+len_z = length(z);
+% len_z
+len_x = length(x);
+% len_x
+len_xy = (len_x - len_z);
+% len_xy
+% Trim x vector to match z:
+x = x(len_xy +1 : end);
+
+pie(x,z)
+
+% legend(z)
+% title('Bat Species Audio Events')
+% https://thingspeak.com/apps/matlab_visualizations/330834

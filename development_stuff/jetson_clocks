@@ -1,0 +1,1 @@
+echo whales | sudo -S jetson_clocks
