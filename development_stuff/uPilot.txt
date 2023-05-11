@@ -1,0 +1,492 @@
+# cd /home/edspeco/buildKernelAndModules-master/ && bash editConfig.sh
+# cd /home/edspeco/buildKernelAndModules-master/ && bash makeKernel.sh
+# cd /home/edspeco/buildKernelAndModules-master/ && bash makeModules.sh
+# cp /boot/Image /home/edspeco/Image.orig   ........... Create a backup.
+# cd /home/edspeco/buildKernelAndModules-master/ && bash copyImage.sh
+
+edspeco@raspberrypi:~ $ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 1: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 1: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 2: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+edspeco@raspberrypi:~ $ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 1: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 1: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 2: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 3: Dev 5, If 0, Class=Vendor Specific Class, Driver=qcserial, 480M
+        |__ Port 3: Dev 5, If 2, Class=Vendor Specific Class, Driver=qcserial, 480M
+        |__ Port 3: Dev 5, If 3, Class=Vendor Specific Class, Driver=qcserial, 480M
+        |__ Port 3: Dev 5, If 12, Class=Communications, Driver=cdc_mbim, 480M
+        |__ Port 3: Dev 5, If 13, Class=CDC Data, Driver=cdc_mbim, 480M
+edspeco@raspberrypi:~ $ 
+
+
+Raspberry Pi 4:
+tail -f /var/log/syslog
+
+Mar  7 22:07:27 raspberrypi kernel: [  314.127627] usb 1-1.3: new high-speed USB device number 5 using xhci_hcd
+Mar  7 22:07:27 raspberrypi kernel: [  314.258625] usb 1-1.3: config 1 has an invalid interface number: 12 but max is 4
+Mar  7 22:07:27 raspberrypi kernel: [  314.258638] usb 1-1.3: config 1 has an invalid interface number: 13 but max is 4
+Mar  7 22:07:27 raspberrypi kernel: [  314.258649] usb 1-1.3: config 1 has an invalid interface number: 13 but max is 4
+Mar  7 22:07:27 raspberrypi kernel: [  314.258659] usb 1-1.3: config 1 has no interface number 1
+Mar  7 22:07:27 raspberrypi kernel: [  314.258669] usb 1-1.3: config 1 has no interface number 4
+Mar  7 22:07:27 raspberrypi kernel: [  314.259355] usb 1-1.3: New USB device found, idVendor=1199, idProduct=9071, bcdDevice= 0.06
+Mar  7 22:07:27 raspberrypi kernel: [  314.259366] usb 1-1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+Mar  7 22:07:27 raspberrypi kernel: [  314.259376] usb 1-1.3: Product: Sierra Wireless EM7455 Qualcomm® Snapdragon™ X7 LTE-A
+Mar  7 22:07:27 raspberrypi kernel: [  314.259386] usb 1-1.3: Manufacturer: Sierra Wireless, Incorporated
+Mar  7 22:07:27 raspberrypi kernel: [  314.259395] usb 1-1.3: SerialNumber: LF93620829021032
+Mar  7 22:07:27 raspberrypi mtp-probe: checking bus 1, device 5: "/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.3"
+Mar  7 22:07:27 raspberrypi mtp-probe: bus: 1, device: 5 was not an MTP device
+Mar  7 22:07:27 raspberrypi kernel: [  314.361632] usbcore: registered new interface driver usbserial_generic
+Mar  7 22:07:27 raspberrypi kernel: [  314.361682] usbserial: USB Serial support registered for generic
+Mar  7 22:07:27 raspberrypi kernel: [  314.371171] usbcore: registered new interface driver qcserial
+Mar  7 22:07:27 raspberrypi kernel: [  314.371258] usbserial: USB Serial support registered for Qualcomm USB modem
+Mar  7 22:07:27 raspberrypi kernel: [  314.378070] qcserial 1-1.3:1.0: Qualcomm USB modem converter detected
+Mar  7 22:07:27 raspberrypi kernel: [  314.380993] usb 1-1.3: Qualcomm USB modem converter now attached to ttyUSB0
+Mar  7 22:07:27 raspberrypi kernel: [  314.386253] qcserial 1-1.3:1.2: Qualcomm USB modem converter detected
+Mar  7 22:07:27 raspberrypi kernel: [  314.388145] usb 1-1.3: Qualcomm USB modem converter now attached to ttyUSB1
+Mar  7 22:07:27 raspberrypi kernel: [  314.398791] qcserial 1-1.3:1.3: Qualcomm USB modem converter detected
+Mar  7 22:07:27 raspberrypi kernel: [  314.399051] usbcore: registered new interface driver cdc_ncm
+Mar  7 22:07:27 raspberrypi kernel: [  314.399329] usb 1-1.3: Qualcomm USB modem converter now attached to ttyUSB2
+Mar  7 22:07:27 raspberrypi kernel: [  314.404864] usbcore: registered new interface driver cdc_wdm
+Mar  7 22:07:27 raspberrypi kernel: [  314.440397] cdc_mbim 1-1.3:1.12: cdc-wdm0: USB WDM device
+Mar  7 22:07:27 raspberrypi kernel: [  314.441887] cdc_mbim 1-1.3:1.12 wwan0: register 'cdc_mbim' at usb-0000:01:00.0-1.3, CDC MBIM, d2:be:62:d2:77:49
+Mar  7 22:07:27 raspberrypi kernel: [  314.442208] usbcore: registered new interface driver cdc_mbim
+Mar  7 22:07:27 raspberrypi mtp-probe: checking bus 1, device 5: "/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.3"
+Mar  7 22:07:27 raspberrypi mtp-probe: bus: 1, device: 5 was not an MTP device
+Mar  7 22:07:27 raspberrypi systemd-udevd[3254]: Using default interface naming scheme 'v240'.
+Mar  7 22:07:27 raspberrypi dhcpcd[467]: wwan0: waiting for carrier
+Mar  7 22:07:27 raspberrypi dhcpcd[467]: wwan0: carrier acquired
+Mar  7 22:07:28 raspberrypi kernel: [  314.588406] 8021q: adding VLAN 0 to HW filter on device wwan0
+Mar  7 22:07:28 raspberrypi dhcpcd[467]: wwan0: IAID 62:d2:77:49
+Mar  7 22:07:28 raspberrypi dhcpcd[467]: wwan0: adding address fe80::ce9e:8d7c:5d66:4604
+
+Download QMi drivers for EM7455:
+https://source.sierrawireless.com/resources/airprime/software/usb-drivers-linux-qmi-software-latest/#sthash.vJx7ScWA.dpbs
+
+sudo apt-get install build-essential make gcc
+sudo apt-get install linux-headers-`uname -r`
+E: Unable to locate package linux-headers-4.9.140-tegra
+E: Couldn't find any package by glob 'linux-headers-4.9.140-tegra'
+E: Couldn't find any package by regex 'linux-headers-4.9.140-tegra'
+
+
+
+3.3.5. Building and Installing the Drivers:
+cd /home/edspeco/Downloads/SierraLinuxQMIdriversS2.39N2.60/GobiSerial; make; sudo make install
+cd /home/edspeco/Downloads/SierraLinuxQMIdriversS2.39N2.60/GobiNet; make; sudo make install
+
+sudo modprobe GobiSerial [debug=Y]
+sudo modprobe GobiNet [debug=Y]
+
+EM/MC74xx only support RAWIP mode, please build GobiNet with RAWIP=1 switch
+cd /home/edspeco/Downloads/SierraLinuxQMIdriversS2.39N2.60/GobiNet; make RAWIP=1;
+
+3.3.6. Querying Driver Versions and Supported Devices
+modinfo GobiSerial
+modinfo GobiNet
+3.3.7. Unloading the Drivers
+sudo rmmod GobiSerial
+sudo rmmod GobiNet
+
+echo 1 > /sys/module/GobiSerial/parameters/debug
+echo 1 > /sys/module/GobiNet/parameters/debug
+Disable diagnostic messages:
+echo 0 > /sys/module/GobiSerial/parameters/debug
+echo 0 > /sys/module/GobiNet/parameters/debug
+3.3.9. Verifying Proper Driver Operation
+1. Open terminal and type tail -f /var/log/syslog
+2. Plug in the Sierra Wireless device.
+3. Check /dev/ for existence of the following devices (check syslog in case the device nodes are
+static i.e. built into the kernel image and not dynamically mounted). Please note that the
+second QMI interface is available only when the device is in multi-pdn mode (/dev/qcqmiy).
+ /dev/ttyUSB0
+ /dev/ttyUSB1
+ /dev/ttyUSB2
+ /dev/qcqmix where x is an integer starting at 0
+ /dev/qcqmiy where y is an integer starting at 0
+
+ls /dev/
+
+
+
+Mar  6 13:17:06 twmffat nautilus-autostart.desktop[19289]: message repeated 399 times: [ Error: Can't initialize nvrm channel]
+Mar  6 13:17:06 twmffat dhcpd[12326]: DHCPDISCOVER from c6:6e:53:aa:8b:ca via l4tbr0: network 192.168.55.0/24: no free leases
+Mar  6 13:17:06 twmffat nautilus-autostart.desktop[19289]: Error: Can't initialize nvrm channel
+Mar  6 13:17:07 twmffat kernel: [ 6515.547932] usb usb2: usb_suspend_both: status -16
+Mar  6 13:17:07 twmffat kernel: [ 6515.568200] usb usb2: usb_suspend_both: status 0
+Mar  6 13:17:07 twmffat kernel: [ 6515.796601] usb 2-1.3: new SuperSpeed USB device number 7 using tegra-xusb
+Mar  6 13:17:07 twmffat kernel: [ 6515.817043] usb 2-1.3: config 1 has an invalid interface number: 12 but max is 4
+Mar  6 13:17:07 twmffat kernel: [ 6515.824547] usb 2-1.3: config 1 has an invalid interface number: 13 but max is 4
+Mar  6 13:17:07 twmffat kernel: [ 6515.834994] usb 2-1.3: config 1 has an invalid interface number: 13 but max is 4
+Mar  6 13:17:07 twmffat kernel: [ 6515.843179] usb 2-1.3: config 1 has no interface number 1
+Mar  6 13:17:07 twmffat kernel: [ 6515.848696] usb 2-1.3: config 1 has no interface number 4
+Mar  6 13:17:07 twmffat kernel: [ 6515.854950] usb 2-1.3: New USB device found, idVendor=1199, idProduct=9071
+Mar  6 13:17:07 twmffat kernel: [ 6515.854956] usb 2-1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+Mar  6 13:17:07 twmffat kernel: [ 6515.854960] usb 2-1.3: Product: Sierra Wireless EM7455 Qualcomm® Snapdragon™ X7 LTE-A
+Mar  6 13:17:07 twmffat kernel: [ 6515.854964] usb 2-1.3: Manufacturer: Sierra Wireless, Incorporated
+Mar  6 13:17:07 twmffat kernel: [ 6515.854967] usb 2-1.3: SerialNumber: LF93620829021032
+Mar  6 13:17:07 twmffat kernel: [ 6515.859398] GobiSerial 2-1.3:1.0: GobiSerial converter detected
+Mar  6 13:17:07 twmffat kernel: [ 6515.865760] usb 2-1.3: GobiSerial converter now attached to ttyUSB0
+Mar  6 13:17:07 twmffat kernel: [ 6515.867283] GobiSerial 2-1.3:1.2: GobiSerial converter detected
+Mar  6 13:17:07 twmffat kernel: [ 6515.868267] usb 2-1.3: GobiSerial converter now attached to ttyUSB1
+Mar  6 13:17:07 twmffat kernel: [ 6515.870056] GobiSerial 2-1.3:1.3: GobiSerial converter detected
+Mar  6 13:17:07 twmffat kernel: [ 6515.871166] usb 2-1.3: GobiSerial converter now attached to ttyUSB2
+Mar  6 13:17:07 twmffat nautilus-autostart.desktop[19289]: message repeated 90 times: [ Error: Can't initialize nvrm channel]
+Mar  6 13:17:07 twmffat mtp-probe: checking bus 2, device 7: "/sys/devices/70090000.xusb/usb2/2-1/2-1.3"
+Mar  6 13:17:07 twmffat nautilus-autostart.desktop[19289]: Error: Can't initialize nvrm channel
+Mar  6 13:17:07 twmffat mtp-probe: bus: 2, device: 7 was not an MTP device
+Mar  6 13:17:07 twmffat nautilus-autostart.desktop[19289]: Error: Can't initialize nvrm channel
+
+
+sudo apt-get install minicom
+
+sudo gedit /etc/modprobe.d/blacklist-modem.conf
+blacklist qcserial
+blacklist qmi_wwan
+
+sudo apt-get remove modemmanager
+sudo killall -9 modemmanager
+sudo reboot
+
+sudo apt-get install gcc-arm*
+cd /home/edspeco/SLQS04.00.23.bin/SampleApps/Connection_Manager/
+make CPU=arm9
+
+navigate to pkgs: cd pkgs
+clean then build: make –f pkgs.mak complete
+clean: make –f pkgs.mak clean
+build: make –f pkgs.mak
+
+cd /home/edspeco/SLQS04.00.23.bin/SampleApps/
+sudo make -f SampleApps.mak complete
+
+Proceedure:
+
+sudo apt-get install network-manager
+sudo apt-get install network-manager-gnome
+sudo apt-get install modemmanager
+
+sudo /usr/sbin/ModemManager --debug
+
+mmcli -L   .............. No modems were found.
+
+
+Create new WWAN0 connection using mobile broadband wizard and '3internet' setting for APN.
+
+sudo minicom -D /dev/ttyUSB2   ........ Launch serial terminal
+AT+CGPADDR=1                      ..... get ip address
+Open modem connection and type in IP address in first column. 
+Other 2 columns type 255.255.255.0
+check 'connect automattically' under 'general' tab.
+
+It may take 2 or more hard shut downs, disconnect power, to get this working.
+
++CGPADDR: 1,10.135.0.115     ............ IP address.
+
+
+
+
+pi@raspberrypi:~ $ sudo systemctl start NetworkManager.service
+pi@raspberrypi:~ $ sudo systemctl start ModemManager.service
+pi@raspberrypi:~ $ nmcli
+cdc-wdm0: disconnected
+	gsm (qcserial, cdc_mbim), hw
+
+eth0: unavailable
+	"0424 7800"
+	ethernet (lan78xx), B8:27:EB:E5:E5:E3, hw, mtu 1500
+
+wlan0: unavailable
+	"Broadcom "
+	wifi (brcmfmac), CE:EE:EB:C3:4D:1C, hw
+
+lo: unmanaged
+	loopback (unknown), 00:00:00:00:00:00, sw, mtu 65536
+
+Use "nmcli device show" to get complete information about known devices and
+"nmcli connection show" to get an overview on active connection profiles.
+
+Consult nmcli(1) and nmcli-examples(5) manual pages for complete usage details.
+pi@raspberrypi:~ $
+
+
+AT!SCACT=?
+AT!SCACT=1,1  ....... +CME ERROR: 30  ..... No network.
+
+To check the registration status of the device,
+AT+CGREG?
+
+
+sudo apt-get install network-manager
+sudo apt-get install modem-manager-gui
+ModemManager 
+
+sudo stop network-manager
+sudo start network-manager
+sudo systemctl start NetworkManager.service
+sudo systemctl stop NetworkManager.service
+sudo systemctl stop ModemManager.service
+sudo systemctl start ModemManager.service
+
+nmcli
+sudo apt-get install -y libqmi-utils
+
+sudo qmicli --device=/dev/cdc-wdm0 --get-expected-data-format
+
+pi@raspberrypi:~ $ sudo qmicli --device=/dev/cdc-wdm0 --get-expected-data-format
+error: cannot get expected data format: Expected data format not retrieved properly: Failed to open file '/sys/class/net/wwan0/qmi/raw_ip': No such file or directory
+
+
+sudo picocom -b 115200 -r -l -echo -c /dev/ttyUSB2   ....... THIS WORKS !!!!! ... But erase -echo.
+sudo minicom -D /dev/ttyUSB2   ....... THIS WORKS !!!!!
+
+sudo minicom -D /dev/ttyACM0
+
+sudo minicom -D /dev/ttyAMA0
+
+ls /dev/ > dev_list_1.txt
+Then run this after you plug it
+
+ls /dev/ | diff --suppress-common-lines -y - dev_list_1.txt
+
+AT+CGDCONT?
+
+https://m2msupport.net/m2msupport/data-call-at-commands-to-set-up-gprsedgeumtslte-data-call/
+
+
+Vodafone Pay As You Go Mobile Internet APN Settings
+Name:	Vodafone Internet
+APN:	pp.vodafone.co.uk
+Username:	wap
+Password:	wap
+Picture Message (MMS) Settings
+MMSC:	http://mms.vodafone.co.uk/servlets/mms
+Proxy:	212.183.137.12
+Port:	8799
+
+EE Mobile Internet APN Settings
+Name:	EE Internet
+APN:	everywhere
+Username:	eesecure
+Password:	secure
+Picture Message (MMS) Settings
+MMSC:	http://mms/
+Proxy:	149.254.201.135
+Port:	8080
+
+Three Mobile Internet APN Settings
+Name:	3
+APN:	3internet
+Username:	(leave blank)
+Password:	(leave blank)
+Picture Message (MMS) Settings
+MMSC:	http://mms.um.three.co.uk:10021/mmsc
+Proxy:	217.171.129.2
+Port:	8799
+
+pi@raspberrypi:~ $ lsusb -t
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=dwc_otg/1p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 1: Dev 3, If 0, Class=Hub, Driver=hub/3p, 480M
+            |__ Port 2: Dev 10, If 12, Class=Communications, Driver=cdc_mbim, 480M
+            |__ Port 2: Dev 10, If 3, Class=Vendor Specific Class, Driver=qcserial, 480M
+            |__ Port 2: Dev 10, If 13, Class=CDC Data, Driver=cdc_mbim, 480M
+            |__ Port 2: Dev 10, If 2, Class=Vendor Specific Class, Driver=qcserial, 480M
+            |__ Port 2: Dev 10, If 0, Class=Vendor Specific Class, Driver=qcserial, 480M
+            |__ Port 1: Dev 6, If 0, Class=Vendor Specific Class, Driver=lan78xx, 480M
+        |__ Port 2: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 3: Dev 5, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 3: Dev 5, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+
+
+AT+CGDCONT= 1,"IPV4V6","everywhere",,,
+AT+CGDCONT?
+
+nmcli monitor
+
+ATi9    ........... Card info
+AT+CSQ   ............ RSSI
+
+3	-107	Marginal
+4	-105	Marginal
+5	-103	Marginal
+6	-101	Marginal
+7	-99	Marginal
+8	-97	Marginal
+
+AT+FCLASS=0            ...... Set to data mode.
+AT+FCLASS?
+
+AT+WS46=?
+AT+WS46?              ....... 25 is good!
+
+To check the registration status of the device,
+AT+CGREG?
+
+Results of network registration status commans,
+0,0 – not registered, MT is not currently searching a new operator to register to
+0,1 – Registered, home network
+0,2 – Searching
+0,3 – Registration denied
+0,5 – Registered, non-home network
+
+SIM card is locked, please correct those issues.
+AT+CPIN?
+
+If connected, network info:
+AT+COPS?
+
+Now to set up the session, the appropriate PDP context needs to be activated.
+AT+CGACT=1,1
+
+
+
+SCRIPT:
+//First check SIM is not locked and it is ready
+AT+CPIN?
+
+//Wait
+WAIT=1
+
+//Check the signal strength. In weak signal conditions, data throughput will be low
+AT+CSQ
+
+//Check what network is the device on
+AT+COPS?
+
+//Wait for few seconds as AT+COPS command can take time
+WAIT=3
+
+//Get the registration status of the device. If the status is ‘1’, the device is registered and in home network
+AT+CGREG?
+
+//Wait
+WAIT=3
+
+//Set up PDP context. Refer to the service provider for APN info
+AT+CGDCONT=1,"IP","everywhere"
+AT+CGDCONT=1,"IPV4V6","three.co.uk"
+AT+CGDCONT=1,"IPV4V6","3internet"
+AT+CGDCONT=1,"IPV4V6","pp.vodafone.co.uk"
+AT+CGDCONT?
+
+//Wait
+WAIT=1
+
+//Enable just MBIM:
+AT!ENTERCND="A710"
+AT!usbcomp=?
+AT!usbcomp=1,1,0000100D
+
+AT!USBCOMP=<Config Index>,<Config Type>,<Interface bitmask>
+  <Config Index>      - configuration index to which the composition applies, should be 1
+
+  <Config Type>       - 1:Generic, 2:USBIF-MBIM, 3:RNDIS
+                        config type 2/3 should only be used for specific Sierra PIDs: 68B1, 9068
+                        customized VID/PID should use config type 1
+
+  <Interface bitmask> - DIAG     - 0x00000001,
+                        NMEA     - 0x00000004,
+                        MODEM    - 0x00000008,
+                        RMNET0   - 0x00000100,
+                        RMNET1   - 0x00000400,
+                        MBIM     - 0x00001000,
+  e.g.
+  10D  - diag, nmea, modem, rmnet interfaces enabled
+  1009 - diag, modem, mbim interfaces enabled
+
+  The default configuration is:
+  at!usbcomp=1,1,10F
+
+
+AT!usbcomp=1,1,0000100D
+AT!usbcomp=1,1,00001009
+AT!usbcomp?
+
+AT+CGPADDR=1
++CGPADDR: 1,10.57.47.165
+
+
+pi@raspberrypi:~ $ ifconfig
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether b8:27:eb:e5:e5:e3  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 386  bytes 33632 (32.8 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 386  bytes 33632 (32.8 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wwan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 169.254.181.248  netmask 255.255.0.0  broadcast 169.254.255.255
+        ether 2a:03:70:bf:90:f5  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 36  bytes 9433 (9.2 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wwan1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 169.254.181.248  netmask 255.255.0.0  broadcast 169.254.255.255
+        inet6 fe80::1db3:fee7:97cc:41b9  prefixlen 64  scopeid 0x20<link>
+        ether 2a:03:70:bf:90:f5  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 95  bytes 20287 (19.8 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+pi@raspberrypi:~ $ 
+
+at!antsel=?
+
+
+//Confirm setting by reading PDP profile
+AT+CGDCONT?
+
+//Perform a GPRS Attach
+AT+CGATT=1
+
+//Wait
+WAIT=3
+
+//Check the status of attach
+AT+CGATT?
+
+//Activate the PDP context
+AT+CGACT=1,1
+
+//Wait
+WAIT=3
+
+//Get the assigned IP Address
+AT+CGPADDR=1
+
+//Wait
+WAIT=3
+
+//Check PDP profile.
+AT+CGDCONT?
+
+//Deactivate PDP Context
+AT+CGACT=0,1
+
+//Wait
+WAIT=3
+
+//Detach from network
+AT+CGATT=0
