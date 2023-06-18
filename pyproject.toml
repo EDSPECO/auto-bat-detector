@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "auto-bat-detector"
+version = "1.1.0"
+description = "This programma is intended to automatically analyse audo recordings for specific types of bats"
+authors = ["Spaander <wouter.spaander@ing.com>"]
+readme = "README.md"
+packages = [{include = "auto_bat_detector"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
