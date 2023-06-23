@@ -66,7 +66,7 @@ Author-email: None
 License: new BSD
 Location: /home/edspeco/.local/lib/python2.7/site-packages
 Requires: numpy, scipy
-edspeco@edspeco-Xavier:~$ 
+edspeco@edspeco-Xavier:~$
 
 sudo apt-get install -y libblas-dev
 sudo apt-get install -y liblapack-dev

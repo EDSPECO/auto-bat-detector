@@ -21,9 +21,9 @@ f_create_filtered_wav_file ()
 {
   echo "\n script record_and_filter reports: ... Now creating filtered.wav file ..... "
   cd /home/edspeco/ultrasonic_classifier/temp/
-  sox new.wav filtered.wav highpass 1k # highpass 15k highpass 15k highpass 15k highpass 15k highpass 15k highpass 15k 
+  sox new.wav filtered.wav highpass 1k # highpass 15k highpass 15k highpass 15k highpass 15k highpass 15k highpass 15k
   cp filtered.wav /home/edspeco/ultrasonic_classifier/unknown_bat_audio/
-  
+
   # Now tell the other programs that the filter.wav is ready for classification:
   touch /home/edspeco/ultrasonic_classifier/helpers/filtered_wav_ready.txt
 }
@@ -57,11 +57,11 @@ f_send_data_via_lora ()
 
 cd /home/edspeco/ultrasonic_classifier/
 
-chunk_time=`cat /home/edspeco/ultrasonic_classifier/helpers/chunk_size_record.txt` 
+chunk_time=`cat /home/edspeco/ultrasonic_classifier/helpers/chunk_size_record.txt`
 # printf "${GREY}Update record audio chunk size in seconds = ${chunk_time}${NC}\n"
 
-while [ -e "$1/home/edspeco/ultrasonic_classifier/helpers/start.txt" ]; do 
-	
+while [ -e "$1/home/edspeco/ultrasonic_classifier/helpers/start.txt" ]; do
+
 	counter=$((counter + 1))
 	rm /home/edspeco/ultrasonic_classifier/helpers/classification_finished.txt
     cd /home/edspeco/ultrasonic_classifier/

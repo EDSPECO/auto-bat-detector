@@ -25,7 +25,7 @@ edspeco@raspberrypi:~ $ lsusb -t
         |__ Port 3: Dev 5, If 3, Class=Vendor Specific Class, Driver=qcserial, 480M
         |__ Port 3: Dev 5, If 12, Class=Communications, Driver=cdc_mbim, 480M
         |__ Port 3: Dev 5, If 13, Class=CDC Data, Driver=cdc_mbim, 480M
-edspeco@raspberrypi:~ $ 
+edspeco@raspberrypi:~ $
 
 
 Raspberry Pi 4:

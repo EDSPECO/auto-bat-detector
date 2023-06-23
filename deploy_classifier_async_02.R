@@ -1,5 +1,5 @@
 # $ cd /home/edspeco/ultrasonic_classifier/ && Rscript deploy_classifier_async_01.R
-# $ R --no-save 
+# $ R --no-save
 # > setwd("/home/edspeco/ultrasonic_classifier/")
 
 # > print("Hello!")
@@ -375,7 +375,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 			# write.table(df11, file = "From_R_01.csv", sep = ",", row.names = FALSE, col.names = TRUE)
 			write.table(prevData, file = "From_R_01.csv", sep = ",", row.names = FALSE, col.names = TRUE)
 			# write.table("", file = "/home/edspeco/ultrasonic_classifier/helpers/classification_finished.txt")
-			
+
 			# Since we have a positive classification result, we can now run the renamimg script, script_3.sh:
 			path = "/home/edspeco/ultrasonic_classifier/script_3.sh"
 			cat(magenta$bold('Now try to run script_3.sh:\n'))

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 # cd /home/edspeco/ultrasonic_classifier/development_stuff/deep_learning/ && python3 determine_number_of_calls_in_specto.py
+# cd /home/tegwyn/ultrasonic_classifier/development_stuff/deep_learning/ && python3 determine_number_of_calls_in_specto.py
 
 
 """
@@ -28,6 +29,8 @@ from scipy.ndimage import filters
 # filename = sys.argv[1]
 # filename = '/home/edspeco/ultrasonic_classifier/images/test/noctula_1511_2_1.jpg'
 # filename = '/home/edspeco/ultrasonic_classifier/images/spectograms/noctula_1512.png'
+# filename = '/home/tegwyn/ultrasonic_classifier/images/test/noctula_1511_2_1.jpg'
+# filename = '/home/tegwyn/ultrasonic_classifier/images/spectograms/noctula_1512.png'
 # sigma = float(sys.argv[2])
 sigma = 2
 k = 2
@@ -40,6 +43,9 @@ import cv2
 # image2 = cv2.imread('/home/edspeco/ultrasonic_classifier/images/test/noctula_1511_2_1.jpg')
 # image2 = cv2.imread('/home/edspeco/ultrasonic_classifier/images/spectograms/noctula_1512.png')
 image2 = cv2.imread('/home/edspeco/ultrasonic_classifier/images/spectograms/brandt_0.5_2169_2_3.jpg')
+# image2 = cv2.imread('/home/tegwyn/ultrasonic_classifier/images/test/noctula_1511_2_1.jpg')
+# image2 = cv2.imread('/home/tegwyn/ultrasonic_classifier/images/spectograms/noctula_1512.png')
+image2 = cv2.imread('/home/tegwyn/ultrasonic_classifier/images/spectograms/brandt_0.5_2169_2_3.jpg')
 invert = cv2.bitwise_not(image2) # OR
 # invert = 255 - image
 
@@ -79,6 +85,7 @@ sel[mask] = invert[mask]
 
 # load image and threshold to make sure it is binary
 im = array(Image.open('/home/edspeco/ultrasonic_classifier/images/spectograms/noctula_1518.png').convert('L'))
+im = array(Image.open('/home/tegwyn/ultrasonic_classifier/images/spectograms/noctula_1518.png').convert('L'))
 im = 1*(im<128)
 
 im = sel

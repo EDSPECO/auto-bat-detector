@@ -26,6 +26,7 @@ if [ "$kernel" = "$nano" ]; then
     echo whales | sudo -S jetson_clocks
 fi
 
+# echo whales | sudo -S jetson_clocks
 # xrandr -o inverted                                                                    # Rotate screen 180 degrees.
 
 
@@ -53,13 +54,13 @@ rm /home/edspeco/ultrasonic_classifier/helpers/batteryAlert.txt                 
 f_service_check()
 {
   if pgrep -f "$SERVICE" >/dev/null
-        then
-                echo "$SERVICE is running"
-                kill $(pgrep -f $SERVICE)
-                sleep 2
-        else
-                echo "$SERVICE is NOT running"
-        fi
+	then
+		echo "$SERVICE is running"
+		kill $(pgrep -f $SERVICE)
+		sleep 2
+	else
+		echo "$SERVICE is NOT running"
+	fi
 }
 
 # script_1.sh
@@ -184,7 +185,7 @@ do
 
     printf  "${BLUE}Now shutdown .. ${count} ${NC}\n"
     # echo whales | sudo halt                              # This does not turn off fan and green LED.
-    echo whales | sudo -S shutdown
+    echo rock2023 | sudo -S shutdown
     sleep 1000                                             # Wait for shutdown to complete.
   fi
   sleep 10
@@ -238,6 +239,6 @@ sleep 5
 # killall -o 24h appName
 # killall -o 24h vim
 
-# s     seconds
-# m     minutes
-# h     hours
+# s	seconds
+# m	minutes
+# h	hours

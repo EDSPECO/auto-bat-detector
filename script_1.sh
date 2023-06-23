@@ -76,7 +76,7 @@ f_main_loop ()
 ############################################################ Loop start
 # counter=`cat /home/edspeco/ultrasonic_classifier/helpers/counter.txt`
 counter=0
-chunk_time=`cat /home/edspeco/ultrasonic_classifier/helpers/chunk_size_record.txt` 
+chunk_time=`cat /home/edspeco/ultrasonic_classifier/helpers/chunk_size_record.txt`
 # until [ $counter -gt ${iterations} ]
 while true
 do

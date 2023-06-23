@@ -1,5 +1,5 @@
 # $ cd /home/edspeco/ultrasonic_classifier/ && Rscript deploy_classifier_async_01.R
-# $ R --no-save 
+# $ R --no-save
 # > setwd("/home/edspeco/ultrasonic_classifier/")
 
 # > print("Hello!")
@@ -105,23 +105,23 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 		  lapply(
 			files_test,
 			threshold_detection,
-			threshold = 3, 
-			min_dur = 1, 
-			max_dur = 80, 
-			min_TBE = 50, 
+			threshold = 3,
+			min_dur = 1,
+			max_dur = 80,
+			min_TBE = 50,
 			max_TBE = Inf,
-			LPF = 120000, 
-			HPF = 15000, 
-			FFT_size = 256, 
-			start_thr = 30, 
-			end_thr = 20, 
-			SNR_thr = 5, 
-			angle_thr = 125, 
-			duration_thr = 400, 
+			LPF = 120000,
+			HPF = 15000,
+			FFT_size = 256,
+			start_thr = 30,
+			end_thr = 20,
+			SNR_thr = 5,
+			angle_thr = 125,
+			duration_thr = 400,
 			spectro_dir = NULL,
-			NWS = 2000, 
-			KPE = 0.00001, 
-			time_scale = 2, 
+			NWS = 2000,
+			KPE = 0.00001,
+			time_scale = 2,
 			EDG = 0.996
 		  ),
 		  basename(file_path_sans_ext(files_test))
@@ -137,7 +137,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 
 		nrow(Event_data_test)
 		num_audio_events <- nrow(Event_data_test)
-		
+
 		#TODO: Why does >0 not work ?????
 		if (num_audio_events >1)
 		{
@@ -173,7 +173,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 			# "Is the unknown wav a rhino_hippo?"
 			RHINO_HIPPO <- consolidate_results(rf_rhino_hippo_file)
 			# RHINO_HIPPO
-			
+
 			DAUB <- consolidate_results(rf_daub_file)
 			BIRD <- consolidate_results(rf_bird_file)
 			BRANDT <- consolidate_results(rf_brandt_file)
@@ -204,11 +204,11 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 			# print("This is the bat name from the new data:")
 			currBatName <- df99[c(1),c(1)]
 			cat(magenta$bold('From the R file: currBatName: ',currBatName,'\n'))
-			
+
 			confidence <- df99[c(1),c(3)]
 			confidence <- confidence * 100
 			cat(magenta$bold('From the R file: confidence: ',confidence,'\n'))
-			
+
 			currBatNameChar <- sapply(currBatName, as.character)                       # Convert to a character vector.
 
 			t = as.integer( as.POSIXct( Sys.time()))
@@ -240,7 +240,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 					# Read the previous time cell:
 					newValue <- prevData[c(1),c(1)]
 					tMillisPrevious = newValue
-					
+
 					# Calculate time interval:
 					timeInterval = tMillisCurrent - tMillisPrevious
 					# print("Time interval: ")
@@ -255,7 +255,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						# Lets add the new data bat frequency integer ,num_audio_events, to the old:
 						prevValue <- prevData["1", currBatNameChar]
 						newValue = prevValue + num_audio_events
-						
+
 						# print("This is the number of rows in the dataframe:")
 						# print(nrow(prevData))
 
@@ -266,7 +266,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 					} else if (( timeInterval > time_limit) & !(currBatNameChar %in% colnames(prevData))) {
 
 						# print("The bat name was not there!")
-						
+
 						# Firstly, duplicate row 1, which is the latest row, dataFrame[1,]:
 						prevData <- rbind(prevData[1,], prevData)
 						# print("Did this dupicate the rows ... YES !!!!")
@@ -296,16 +296,16 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						# print("Now we have our new dataframe with some useful data:")
 						# df9
 						# print(df9)
-						
+
 						# Now add the new column:
-						prevData <- cbind(prevData, df9) 
-						
+						prevData <- cbind(prevData, df9)
+
 						# Now set all the values of column bat name to zero:
 						value = "0"                                                         # (num_audio_events = 0)
 						prevData[,currBatNameChar] <- value                                # All rows in species column
 						# print("What does the new dataframe look like? .... TWO ")
 						# print(prevData)
-						
+
 						# Then set the first row to correct num_audio_events value:
 						value = num_audio_events
 						prevData["1", currBatNameChar] <- value                             # Latest row only
@@ -313,11 +313,11 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						# print(prevData)
 
 						# The time cell gets set to zero, so put the time value back into that cell:
-						value = tMillisCurrent 
+						value = tMillisCurrent
 						prevData["1", "BLANK"] <- value                             # Latest row only, time column = BLANK
 						# print("What does the new dataframe look like? ...... FOUR")
 						# print(prevData)
-						
+
 				##############################################################################################################
 					# 3.This is for the case where there is a species name AND we're outside the time limit:
 					} else if ((currBatNameChar %in% colnames(prevData)) & ( timeInterval > time_limit))  {
@@ -331,14 +331,14 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						value = t
 						prevData["1", "BLANK"] <- value
 
-						
+
 						# Now set all the values of row 1 to zero:
 						value = 0                                                         # (num_audio_events = 0)
 						prevData["1",] <- value                                # All rows in species column
 						# print("What does the new dataframe look like? .... TWO ")
 						# print(prevData)
-						
-						
+
+
 						# Then set the first row to correct num_audio_events value:
 						value = num_audio_events
 						prevData["1", currBatNameChar] <- value                             # Latest row only
@@ -346,7 +346,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						# print(prevData)
 
 						# The time cell gets set to zero, so put the time value back into that cell:
-						value = tMillisCurrent 
+						value = tMillisCurrent
 						prevData["1", "BLANK"] <- value                             # Latest row only, time column = BLANK
 						# print("What does the new dataframe look like? ...... FOUR")
 						# print(prevData)
@@ -366,7 +366,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						df9
 						# print(df9)
 						# Now add the new column:
-						prevData <- cbind(prevData, df9) 
+						prevData <- cbind(prevData, df9)
 
 						# Set all the values of bat frequency, num_audio_events, of the new species column, into the new dataframe as zero:
 						value = 0                                                         # (num_audio_events = 0)
@@ -389,7 +389,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						df15 <- data.frame(df14)
 						colnames(df15) <- c("BLANK")
 						prevData <- df15
-						
+
 						# print("The bat name was not there!")
 						# Now to create our new data column:
 						df9 <- data.frame(placeholder_name = 1)
@@ -399,9 +399,9 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						df9["1", currBatNameChar] <- num_audio_events
 						# print("Now we have our new dataframe with some useful data:")
 						# print(df9)
-						
+
 						# Now add the new column:
-						prevData <- cbind(prevData, df9) 
+						prevData <- cbind(prevData, df9)
 
 						# Set all the values of bat frequency, num_audio_events, of the new species column, into the new dataframe as zero:
 						value = 0                                                         # (num_audio_events = 0)
@@ -414,7 +414,7 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 						prevData["1", currBatNameChar] <- value                             # Latest row only
 						# print("What does the new dataframe look like? ...... SIX")
 						# print(prevData)
-						
+
 						# print("This should be the new csv file to save?")
 						# print(df15)
 						write.table(df15, file = "From_R_01.csv", sep = ",", row.names = FALSE, col.names = TRUE)
@@ -430,16 +430,16 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 				# write.table(df11, file = "From_R_01.csv", sep = ",", row.names = FALSE, col.names = TRUE)
 				write.table(prevData, file = "From_R_01.csv", sep = ",", row.names = FALSE, col.names = TRUE)
 				# write.table("", file = "/home/edspeco/ultrasonic_classifier/helpers/classification_finished.txt")
-				
+
 				# Since we have a positive classification result, we can now run the renamimg script, script_3.sh:
 				path = "/home/edspeco/ultrasonic_classifier/script_3.sh"
 				cat(magenta$bold('Now try to run script_3.sh:\n'))
 				system(path)
 				cat(magenta$bold('Did script_3.sh work?:\n'))
-				
+
 				# Now run create_spectogram.py or create_graph.py:
 				# TODO: Can we remove all references to Final_result.txt in script_3.sh ???
-				
+
 				# TODO: we can move this next if section to the set up section later on:
 				if(file.exists("/home/edspeco/ultrasonic_classifier/helpers/toggled_02.txt"))
 				{
@@ -452,14 +452,14 @@ while (file.exists("/home/edspeco/ultrasonic_classifier/helpers/start.txt"))
 					print(text_or_graph_or_spectogram)
 					cat(magenta$bold('From the R file: high_or_low_res_spectogram:\n'))
 					print(high_or_low_res_spectogram)
-					
+
 					if (text_or_graph_or_spectogram == "spectogram")
 					{
 						if (high_or_low_res_spectogram == "LOW")
 						{
 							cat(magenta$bold('From the R file: LOW resolution was selected !!!:\n'))
 							system('python3 /home/edspeco/ultrasonic_classifier/create_spectogram.py')
-						
+
 						} else {
 							system('python3 /home/edspeco/ultrasonic_classifier/create_spectogram_batch_process.py')
 							cat(magenta$bold('From the R file: HIGH resolution was selected !!!:\n'))

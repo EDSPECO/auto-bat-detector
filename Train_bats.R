@@ -51,13 +51,13 @@ TD <- threshold_detection(
   KME = 1e-04, # Measurement Error parameter of the Kalman filter (for smoothing)
 
   settings = FALSE, #  Save on a list the above parameters set with this function
-  acoustic_feat = TRUE, # Extracts the acoustic and signal quality parameters 
+  acoustic_feat = TRUE, # Extracts the acoustic and signal quality parameters
   metadata = FALSE, # Extracts on a list the metadata embedded with the Wave file
   spectro_dir = file.path(wd), # "spectrograms"), # Directory where to save the spectrograms
   #spectro_dir = NULL,
   time_scale = 0.01, # Time resolution of 2 ms for spectrogram display
-  ticks = TRUE # Tick marks and their intervals are drawn on the y-axis (frequencies) 
-) 
+  ticks = TRUE # Tick marks and their intervals are drawn on the y-axis (frequencies)
+)
 
 # Get the number of extracted audio events
 nrow(TD$data$event_data)
@@ -71,23 +71,23 @@ TDs <- setNames(
   lapply(
     files,
     threshold_detection,
-    threshold = 3, 
-    min_dur = 1, 
-    max_dur = 80, 
-    min_TBE = 50, 
+    threshold = 3,
+    min_dur = 1,
+    max_dur = 80,
+    min_TBE = 50,
     max_TBE = Inf,
-    LPF = 120000, 
-    HPF = 15000, 
-    FFT_size = 256, 
-    start_thr = 30, 
-    end_thr = 20, 
-    SNR_thr = 5, 
-    angle_thr = 125, 
-    duration_thr = 400, 
+    LPF = 120000,
+    HPF = 15000,
+    FFT_size = 256,
+    start_thr = 30,
+    end_thr = 20,
+    SNR_thr = 5,
+    angle_thr = 125,
+    duration_thr = 400,
     spectro_dir = NULL,
-    NWS = 2000, 
-    KPE = 0.00001, 
-    time_scale = 2, 
+    NWS = 2000,
+    KPE = 0.00001,
+    time_scale = 2,
     EDG = 0.996
   ),
   basename(file_path_sans_ext(files))
@@ -105,7 +105,7 @@ bat_train <- function(bat_name)
   # Keep the extracted feature and merge in a single data frame for further analysis
   Event_data_01 <- do.call("rbind", c(lapply(TDs, function(x) x$data$event_data), list(stringsAsFactors = FALSE)))
   nrow(Event_data_01)
-  
+
   # Compute the number of extracted c_pip calls
   # sum(startsWith(Event_data_01$filename, "c_pip"))
 
@@ -113,27 +113,27 @@ bat_train <- function(bat_name)
   classes_01 <- as.factor(ifelse(startsWith(Event_data_01$filename, bat_name),"YES", "NO"))
   # Possible classes: "c_pip","c_pip",  "f_rhino", "h_rhino", "n_pip", "nattereri", "noctula", "plecotus", "s_pip"
   Event_data_01 <- cbind(data.frame(Class_01 = classes_01), Event_data_01)
-  
+
   # Get rid of the filename and time in the recording
   Event_data_01$filename <- Event_data_01$starting_time <- NULL
-  
+
   #Event_data_01  #Uncomment to see data.
-  
+
   # Split the data in 70% Training / 30% Test sets
   train <- sample(1:nrow(Event_data_01), round(nrow(Event_data_01) * .99))
   Train <- Event_data_01[train,]
-  
+
   test <- setdiff(1:nrow(Event_data_01), train)
   Test <- Event_data_01[test,]
-  
+
   # Train a random forest classifier
   set.seed(666)
   rf_Paddy <- randomForest(Class_01 ~ + duration + freq_max_amp + freq_max + freq_min +
                           bandwidth + freq_start + freq_center + freq_end +
-                          freq_knee + fc + freq_bw_knee_fc + bin_max_amp + 
+                          freq_knee + fc + freq_bw_knee_fc + bin_max_amp +
                           pc_freq_max_amp + pc_freq_max + pc_freq_min +
                           pc_knee + temp_bw_knee_fc + slope + kalman_slope +
-                          curve_neg + curve_pos_start + curve_pos_end + 
+                          curve_neg + curve_pos_start + curve_pos_end +
                           mid_offset + smoothness + snr + hd + smoothness,
                         data = Train, importance = FALSE, proximity = FALSE,
                         replace = TRUE, ntree = 4000, mtry = 7)
@@ -245,23 +245,23 @@ TDs <- setNames(
   lapply(
     files_test,
     threshold_detection,
-    threshold = 3, 
-    min_dur = 1, 
-    max_dur = 80, 
-    min_TBE = 50, 
+    threshold = 3,
+    min_dur = 1,
+    max_dur = 80,
+    min_TBE = 50,
     max_TBE = Inf,
-    LPF = 120000, 
-    HPF = 15000, 
-    FFT_size = 256, 
-    start_thr = 30, 
-    end_thr = 20, 
-    SNR_thr = 5, 
-    angle_thr = 125, 
-    duration_thr = 400, 
+    LPF = 120000,
+    HPF = 15000,
+    FFT_size = 256,
+    start_thr = 30,
+    end_thr = 20,
+    SNR_thr = 5,
+    angle_thr = 125,
+    duration_thr = 400,
     spectro_dir = NULL,
-    NWS = 2000, 
-    KPE = 0.00001, 
-    time_scale = 2, 
+    NWS = 2000,
+    KPE = 0.00001,
+    time_scale = 2,
     EDG = 0.996
   ),
   basename(file_path_sans_ext(files_test))
@@ -274,7 +274,7 @@ TDs <- TDs[lapply(TDs, function(x) length(x$data)) > 0]
 Event_data_test <- do.call("rbind", c(lapply(TDs, function(x) x$data$event_data), list(stringsAsFactors = FALSE)))
 nrow(Event_data_test)
 
-# To look at the predictions 
+# To look at the predictions
 print("Is the unknown wav a c_pip?")
 predict(rf_c_pip , Event_data_test[,-1], type = "prob")
 
